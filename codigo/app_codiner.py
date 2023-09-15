@@ -603,20 +603,20 @@ class Scraper_Codiner():
                                 print('elemento no se encuentra disponible')
                                 fuera_plazo = ''
                      
-                    #Posicion 21
-                    texto_a_verificar = 'Interes por mora'
-                    posicion_21 = None 
+                    # #Posicion 21
+                    # texto_a_verificar = 'Interes por mora'
+                    # posicion_21 = None 
                     
-                    for idx, elemento in enumerate(lista_limpia):
-                        if texto_a_verificar in elemento:
-                            posicion_21 = idx
-                            try:
-                                interes_mora_b = lista_limpia[posicion_21+2]
-                                interes_mora = interes_mora_b.replace('.','')
-                                break
-                            except:
-                                print('elemento no se encuentra disponible')
-                                interes_mora = ''
+                    # for idx, elemento in enumerate(lista_limpia):
+                    #     if texto_a_verificar in elemento:
+                    #         posicion_21 = idx
+                    #         try:
+                    #             interes_mora_b = lista_limpia[posicion_21+2]
+                    #             interes_mora = interes_mora_b.replace('.','')
+                    #             break
+                    #         except:
+                    #             print('elemento no se encuentra disponible')
+                    #             interes_mora = ''
 
                     #Posicion 23
                     texto_a_verificar = 'Cargo Fondo Estabilizacion Ley 21472 (Exento)'
@@ -691,6 +691,56 @@ class Scraper_Codiner():
                     except:
                         print('elemento no se encuentra disponible')
                         total_pagar = ''
+
+                    #Posicion 29 (arreglo #1)
+                    texto_a_verificar = 'Transporte de Electricidad'
+                    posicion_29 = None 
+                    
+                    for idx, elemento in enumerate(lista_limpia):
+                        if texto_a_verificar in elemento:
+                            posicion_29 = idx
+                            try:
+                                valor_transporte_elec_b = lista_limpia[posicion_29+2]
+                                valor_transporte_elec = valor_transporte_elec_b.replace('.','')
+                                break
+                            except:
+                                print('elemento no se encuentra disponible')
+                                valor_transporte_elec = ''
+                    
+                    #Posicion 30 (arreglo #2)
+                    elemento_a_buscar = 'Pago de la cuenta fuera de plazo'
+                    try:
+                        posicion_30 = lista_limpia.index(elemento_a_buscar)
+                        total_pagar_fuera_plazo_b = lista_limpia[posicion_30+2]
+                        total_pagar_fuera_plazo = total_pagar_fuera_plazo_b.replace('.','')
+                    except:
+                        print('elemento no se encuentra disponible')
+                        total_pagar_fuera_plazo = ''
+                    
+                    #Posicion 31 (arreglo #3)
+                    elemento_a_buscar = 'Interes por mora'
+                    try:
+                        posicion_31 = lista_limpia.index(elemento_a_buscar)
+                        interes_mora_b = lista_limpia[posicion_31+2]
+                        interes_mora = interes_mora_b.replace('.','')
+                    except:
+                        print('elemento no se encuentra disponible')
+                        interes_mora = ''
+                        
+                    #Posicion 32 (arreglo #4)
+                    texto_a_verificar = 'Cargo Fondo Estabilizacion'
+                    posicion_32 = None 
+                    
+                    for idx, elemento in enumerate(lista_limpia):
+                        if texto_a_verificar in elemento:
+                            posicion_32 = idx
+                            try:
+                                valor_fondo_estabilizacion_b= lista_limpia[posicion_32+2]
+                                valor_fondo_estabilizacion = valor_fondo_estabilizacion_b.replace('.','')
+                                break
+                            except:
+                                print('elemento no se encuentra disponible')
+                                valor_fondo_estabilizacion = ''
 
                 #Cargamos libro excel donde volcaremos los datos
                 libro = load_workbook(output_path+'/'+'Formato Planilla.xlsx')
@@ -783,6 +833,30 @@ class Scraper_Codiner():
                 hoja_electricidad.cell(row=ultima_fila+1,column=76).value = int(neto)
                 hoja_electricidad.cell(row=ultima_fila+1,column=79).value = int(saldo_anterior)
                 hoja_electricidad.cell(row=ultima_fila+1,column=81).value = int(total_pagar)
+
+                #Arreglo 1 
+                try:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=110).value = int(valor_transporte_elec)
+                except:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=110).value = valor_transporte_elec
+                
+                #Arreglo 2
+                try:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=92).value = int(total_pagar_fuera_plazo)
+                except:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=92).value = total_pagar_fuera_plazo
+
+                #Arreglo 3
+                try:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=93).value = int(interes_mora)
+                except:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=93).value = interes_mora               
+
+                #Arreglo 4
+                try:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=108).value = int(valor_fondo_estabilizacion)
+                except:
+                    hoja_electricidad.cell(row=ultima_fila+1,column=108).value = valor_fondo_estabilizacion
 
                 libro.save(output_path+'/'+'Formato Planilla.xlsx')
                     
